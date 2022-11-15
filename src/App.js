@@ -13,6 +13,14 @@ function App() {
   const addTask = () => {
     const newTodo = [...todoList, newTask]
     setTodoList(newTodo)
+    // console.log(newTodo)
+    // setNewTask("")
+  }
+
+  const deleteTask = (taskKey) => {
+    let tempTodo = [...todoList]
+      tempTodo.splice(taskKey,1)
+      setTodoList(tempTodo)
   }
 
   return (
@@ -20,6 +28,15 @@ function App() {
      <div className="addTask">
       <input onChange={handleChange}/>
       <button onClick={addTask}>+Task</button>
+     </div>
+     {/* List items */}
+     <div>
+      {todoList.map((task, key) => {
+        return (<div key={key}>
+              <h1>{task}</h1>
+              <button onClick={() => deleteTask(key)}>X</button>
+        </div>)
+      })}
      </div>
     </div>
   );

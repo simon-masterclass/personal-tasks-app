@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import './App.css';
-import { Planets } from "./Planets"
+import { Task } from "./Task"
 
 function App() {
   const [todoList, setTodoList] = useState([])  
@@ -11,7 +11,12 @@ function App() {
   }
 
   const addTask = () => {
-    const newTodo = [...todoList, newTask]
+    const taskObj = {
+      id: todoList.length,
+      todo: newTask,
+      done: false
+    }
+    const newTodo = [...todoList, taskObj]
     setTodoList(newTodo)
     // console.log(newTodo)
     // setNewTask("")
@@ -23,6 +28,22 @@ function App() {
       setTodoList(tempTodo)
   }
 
+  const taskDoneTF = (keyTask) => {
+    setTodoList(
+      todoList.map((task) => {
+        if (task.id === keyTask.id) {
+          if (task.done === false) {
+            return {...task, done: true}
+          } else {
+            return {...task, done: false}
+          }
+        } else {
+          return task
+        }
+      })
+    )
+   }
+
   return (
     <div className="App">
      <div className="addTask">
@@ -30,14 +51,15 @@ function App() {
       <button onClick={addTask}>+Task</button>
      </div>
      {/* List items */}
-     <div>
-      {todoList.map((task, key) => {
-        return (<div key={key}>
-              <h1>{task}</h1>
-              <button onClick={() => deleteTask(key)}>X</button>
-        </div>)
+     <ul>
+      {todoList.map((task, tKey) => {
+        return (
+          <span key={tKey} >
+            <Task taskObj={task} tasKey={tKey} deleteTask={deleteTask} taskDoneTF={taskDoneTF} doneTrue={task.done} />
+          </span>
+        )
       })}
-     </div>
+     </ul>
     </div>
   );
 }
